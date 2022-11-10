@@ -2,7 +2,6 @@
 import random
 
 coords = [' ',' ' ,' ',' ',' ',' ',' ',' ',' ']
-winning_moves = []
 
 computer_win = False
 player_win = False
@@ -35,13 +34,10 @@ def one_round():
 def wincheck():
     global player_win
     global computer_win
-    global winning_moves
     for i in range(0,9,3):
         if coords[i] == coords[i+1] and coords[i+1] == coords[i+2]:
             if coords[i] == 'x':
                 player_win = True
-                print(Fore.RED, 'runjn')
-                winning_moves = [i, i+1, i+2]
             elif coords[i] == 'o':
                 computer_win = True
 
