@@ -44,7 +44,7 @@ def wincheck():
                 winning_moves = [i, i+1, i+2]
             elif coords[i] == 'o':
                 computer_win = True
-                
+
     for i in range(0,3):
         if coords[i] == coords[i+3] and coords[i+3] == coords[i+6]:
             if coords[i] == 'x':
