@@ -1,13 +1,5 @@
 # script to play tic-tac-toe against the computer in the console
 import random
-from colorama import Fore, Back, Style
-
-# add it lights up the color of the winning moves when someone moves
-print(Fore.RED + 'some red text')
-
-print(Style.DIM + 'and in dim text')
-print(Style.RESET_ALL)
-print('back to normal now')
 
 coords = [' ',' ' ,' ',' ',' ',' ',' ',' ',' ']
 winning_moves = []
@@ -22,24 +14,14 @@ def drawboard():
     print('-' * 10)
     print(coords[6], '|',coords[7], '|',coords[8])
 
-    if computer_win == True or player_win == True:
-        index1 = winning_moves[0]
-        index2 = winning_moves[1]
-        index3 = winning_moves[2]
-        print(coords[index1])
-        print(coords[index2])
-        print(coords[index3])
-
-
-
 def one_round():
     player_move = int(input('Where would you like to play, coordinates are 1-9: '))
-    #while True:
-        #if coords[player_move-1] != ' ':
-            #print("you cannot move there, try again: ")
-            #player_move = int(input('Where would you like to play, coordinates are 1-9: '))
-        #else:
-            #break
+    while True:
+        if coords[player_move-1] != ' ':
+            print("you cannot move there, try again: ")
+            player_move = int(input('Where would you like to play, coordinates are 1-9: '))
+        else:
+            break
 
     while True:
         computer_move = random.randint(1,9) 
@@ -62,8 +44,7 @@ def wincheck():
                 winning_moves = [i, i+1, i+2]
             elif coords[i] == 'o':
                 computer_win = True
-            
-    
+                
     for i in range(0,3):
         if coords[i] == coords[i+3] and coords[i+3] == coords[i+6]:
             if coords[i] == 'x':
