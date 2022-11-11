@@ -24,7 +24,7 @@ def one_round():
 
     while True:
         computer_move = random.randint(1,9) 
-        if coords[computer_move-1] == ' ':
+        if coords[computer_move-1] == ' ' and computer_move != player_move:
             break
 
     coords[player_move-1] = 'x'
@@ -62,6 +62,7 @@ def wincheck():
 
         elif coords[4] == 'o':
             computer_win = True
+
 
 def playgame():
     while True:
