@@ -1,5 +1,4 @@
 # script to play tic-tac-toe against the computer in the console
-import random
 
 coords = [' ',' ' ,' ',' ',' ',' ',' ',' ',' ']
 
@@ -22,14 +21,26 @@ def one_round():
         else:
             break
 
-    while True:
-        computer_move = random.randint(1,9) 
-        if coords[computer_move-1] == ' ' and computer_move != player_move:
-            break
 
     coords[player_move-1] = 'x'
-    coords[computer_move-1] = 'o'
     drawboard()
+    wincheck()
+    if player_win:
+        drawboard()
+        print('You win!')
+        return
+    if ' ' not in coords:
+        drawboard()
+        print('tie')
+    
+    ai_move = minmax(coords, True)  # Pass True for the maximizing player (computer)
+    print(f'Computer moves to {ai_move + 1}:')
+    coords[ai_move] = '0'
+    drawboard()
+    wincheck()
+    if computer_win:
+        print('You lose')
+        return
 
 def wincheck():
     global player_win
@@ -67,13 +78,44 @@ def wincheck():
 def playgame():
     while True:
         one_round()
-        wincheck()
-        if player_win == True:
-            drawboard()
-            return print("You win!")
-        elif computer_win:
-            drawboard()
-            return print("You lose! :(")
+        if player_win or computer_win or ' ' not in coords:
+            break
+
+
+
+def getempty(coords):
+    empty = [index for index, item in enumerate(coords) if item == ' ']
+    return empty 
+
+
+
+def minmax(coords, maximizing_player):
+    available_coords = getempty(coords)
+
+    if player_win:
+        return -1
+    elif computer_win:
+        return 1
+    elif len(available_coords) == 0:
+        return 0
+
+    if maximizing_player:
+        max_eval = float('-inf')
+        for move in available_coords:
+            coords[move] = 'o'
+            eval = minmax(coords, False)
+            coords[move] = ' '
+            max_eval = max(max_eval, eval)
+        return max_eval
+    else:
+        min_eval = float('inf')
+        for move in available_coords:
+            coords[move] = 'x'
+            eval = minmax(coords, True)
+            coords[move] = ' '
+            min_eval = min(min_eval, eval)
+        return min_eval
 
 
 playgame()
+
