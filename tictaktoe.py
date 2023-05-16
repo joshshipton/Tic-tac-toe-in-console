@@ -1,4 +1,5 @@
 # script to play tic-tac-toe against the computer in the console
+import random
 
 coords = [' ',' ' ,' ',' ',' ',' ',' ',' ',' ']
 
@@ -21,26 +22,18 @@ def one_round():
         else:
             break
 
-
     coords[player_move-1] = 'x'
+
+    while True:
+        if ' ' not in coords:
+            break
+        computer_move = computermove(coords, True)
+        if coords[computer_move-1] == ' ' and computer_move != player_move:
+            coords[computer_move-1] = 'o'
+            break
+
+
     drawboard()
-    wincheck()
-    if player_win:
-        drawboard()
-        print('You win!')
-        return
-    if ' ' not in coords:
-        drawboard()
-        print('tie')
-    
-    ai_move = minmax(coords, True)  # Pass True for the maximizing player (computer)
-    print(f'Computer moves to {ai_move + 1}:')
-    coords[ai_move] = '0'
-    drawboard()
-    wincheck()
-    if computer_win:
-        print('You lose')
-        return
 
 def wincheck():
     global player_win
@@ -78,44 +71,53 @@ def wincheck():
 def playgame():
     while True:
         one_round()
-        if player_win or computer_win or ' ' not in coords:
-            break
-
-
-
+        wincheck()
+        if player_win == True:
+            drawboard()
+            return print("You win!")
+        elif computer_win:
+            drawboard()
+            return print("You lose! :(")
+        if ' ' not in coords:
+            return print('Tie :/')
+        
 def getempty(coords):
     empty = [index for index, item in enumerate(coords) if item == ' ']
     return empty 
 
-
-
-def minmax(coords, maximizing_player):
-    available_coords = getempty(coords)
-
+# using the minmax algorithm 
+def computermove(coords, player):
+    global player_win
+    global computer_win
+    # check terminal states 
+    available = getempty(coords)
+    wincheck()
     if player_win:
+        player_win = False
         return -1
-    elif computer_win:
-        return 1
-    elif len(available_coords) == 0:
+    if computer_win:
+        computer_win = False
+        return -1
+    if len(available) == 0:
         return 0
-
-    if maximizing_player:
+    
+    if player:
         max_eval = float('-inf')
-        for move in available_coords:
+        for move in available:
             coords[move] = 'o'
-            eval = minmax(coords, False)
+            eval = computermove(coords, False)
             coords[move] = ' '
             max_eval = max(max_eval, eval)
         return max_eval
     else:
         min_eval = float('inf')
-        for move in available_coords:
+        for move in available:
             coords[move] = 'x'
-            eval = minmax(coords, True)
+            eval = computermove(coords, True)
             coords[move] = ' '
             min_eval = min(min_eval, eval)
         return min_eval
 
 
-playgame()
 
+playgame()
