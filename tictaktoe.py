@@ -28,8 +28,9 @@ def one_round():
         if ' ' not in coords:
             break
         computer_move = computermove(coords, True)
-        if coords[computer_move-1] == ' ' and computer_move != player_move:
-            coords[computer_move-1] = 'o'
+        best_computer_move = computer_move[1]
+        if coords[best_computer_move] == ' ' and computer_move != player_move:
+            coords[best_computer_move] = 'o'
             break
 
 
@@ -89,35 +90,47 @@ def getempty(coords):
 def computermove(coords, player):
     global player_win
     global computer_win
-    # check terminal states 
+    
     available = getempty(coords)
     wincheck()
+    
     if player_win:
         player_win = False
-        return -1
+        return -1, None
     if computer_win:
         computer_win = False
-        return -1
+        return 1, None
     if len(available) == 0:
-        return 0
+        return 0, None
     
     if player:
         max_eval = float('-inf')
+        best_move = None
+        
         for move in available:
             coords[move] = 'o'
-            eval = computermove(coords, False)
+            eval_score, _ = computermove(coords, False)
             coords[move] = ' '
-            max_eval = max(max_eval, eval)
-        return max_eval
+            
+            if eval_score > max_eval:
+                max_eval = eval_score
+                best_move = move
+        
+        return max_eval, best_move
     else:
         min_eval = float('inf')
+        best_move = None
+        
         for move in available:
             coords[move] = 'x'
-            eval = computermove(coords, True)
+            eval_score, _ = computermove(coords, True)
             coords[move] = ' '
-            min_eval = min(min_eval, eval)
-        return min_eval
-
+            
+            if eval_score < min_eval:
+                min_eval = eval_score
+                best_move = move
+        
+        return min_eval, best_move
 
 
 playgame()
