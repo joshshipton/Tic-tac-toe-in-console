@@ -1,10 +1,10 @@
 # script to play tic-tac-toe against the computer in the console
-import random
 
 coords = [' ',' ' ,' ',' ',' ',' ',' ',' ',' ']
 
 computer_win = False
 player_win = False
+game_over = False
 
 def drawboard():
     print(coords[0], '|',coords[1], '|',coords[2])
@@ -68,20 +68,6 @@ def wincheck():
         elif coords[4] == 'o':
             computer_win = True
 
-
-def playgame():
-    while True:
-        one_round()
-        wincheck()
-        if player_win == True:
-            drawboard()
-            return print("You win!")
-        elif computer_win:
-            drawboard()
-            return print("You lose! :(")
-        if ' ' not in coords:
-            return print('Tie :/')
-        
 def getempty(coords):
     empty = [index for index, item in enumerate(coords) if item == ' ']
     return empty 
@@ -133,4 +119,34 @@ def computermove(coords, player):
         return min_eval, best_move
 
 
+def playgame():
+    global player_win
+    global computer_win
+    global coords
+    global game_over
+    while True:
+        one_round()
+        wincheck()
+        if player_win == True:
+            drawboard()
+            print("You win!")
+            game_over = True
+        elif computer_win:
+            drawboard()
+            print("You lose! :(")
+            game_over = True
+        if ' ' not in coords:
+             print('Tie :/')
+             game_over = True
+        if game_over:
+            play_again = input('Would you like to play again? (y/n): ')
+            if play_again == 'y':
+                coords = [' ',' ' ,' ',' ',' ',' ',' ',' ',' ']
+                computer_win = False
+                player_win = False
+                game_over = False
+                drawboard()
+            else:
+                return print('See you next time :)')
+            
 playgame()
